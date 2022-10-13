@@ -1,28 +1,22 @@
-/* eslint-disable react/style-prop-object */
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import Header from './src/components/header/index';
+import Home from './src/pages/Home';
+import MyBackGround from './src/components/back_ground';
+import MyStatusBar from './src/components/status_bar';
 
 export default function App() {
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: 'orange',
-      alignItems: 'center',
-      justifyContent: 'center',
-      color: 'orange',
-    },
-  });
-
-  const styleText = StyleSheet.create({
-    color: 'white',
-    fontSize: 40,
-  });
-
   return (
-    <View style={styles.container}>
-      <Text style={styleText}>Te amo gorda!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaProvider>
+      <MyStatusBar backgroundColor="#ffffff" barStyle="default" />
+      <MyBackGround
+        content={
+          <>
+            <Header />
+            <Home />
+          </>
+        }
+      />
+    </SafeAreaProvider>
   );
 }
