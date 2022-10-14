@@ -1,30 +1,40 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable react/destructuring-assignment */
+// import { useParams } from 'react-router-dom';
+// import { toast } from 'react-toastify';
+// import { get } from 'lodash';
 import React, { useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { get } from 'lodash';
+import { ScrollView } from 'react-native';
 import axios from '../../services/axios';
-import history from '../../services/history';
+import {
+  AnimeContainer,
+  TituloText,
+  MyText,
+  EpisodioContainer,
+  TextEp,
+} from './styled';
+import { GlobalContainer } from '../../styles/GlobalStyles';
 
-export default function Anime() {
+export default function Anime(props) {
   const [anime, setAnime] = useState({});
   const [episodios, setEpisodios] = useState([]);
-  const [rate, setRate] = useState('');
-  const [review, setReview] = useState('');
-  const [comentarios, setComentarios] = useState([]);
-  const { id } = useParams();
+  // const [rate, setRate] = useState('');
+  // const [review, setReview] = useState('');
+  // const [comentarios, setComentarios] = useState([]);
 
   React.useEffect(() => {
     async function getAnime() {
-      const ani = await axios.get(`/animes/${id}`);
-      const epi = await axios.get(`/episodio/byFk/${id}`);
+      const ani = await axios.get(`/animes/${props.id}`);
+      const epi = await axios.get(`/episodio/byFk/${props.id}`);
       setAnime(ani.data);
       setEpisodios(epi.data);
-      const coment = await axios.get(`/comentario/${id}`);
-      setComentarios(coment.data);
+      // const coment = await axios.get(`/comentario/${id}`);
+      // setComentarios(coment.data);
     }
     getAnime();
-  }, [id]);
+  }, []);
 
+  /*
   async function handleSubmit(e) {
     e.preventDefault();
     try {
@@ -41,10 +51,24 @@ export default function Anime() {
       errors.map(error => toast.error(error));
     }
   }
+  */
 
-  const contStyle = {
-    display: 'block',
-  };
-
-  return ();
+  return (
+    <ScrollView>
+      <GlobalContainer>
+        <AnimeContainer>
+          <TituloText>{anime.titulo}</TituloText>
+          <MyText>Lançamento: {anime.data_lancamento}</MyText>
+          <MyText>Categoria: {anime.categoria}</MyText>
+          <MyText>Descrição: {anime.descricao}</MyText>
+        </AnimeContainer>
+        <EpisodioContainer>
+          <TextEp>Episódios</TextEp>
+          {episodios.map(episodio => (
+            <MyText key={episodio.id}>{episodio.nome}</MyText>
+          ))}
+        </EpisodioContainer>
+      </GlobalContainer>
+    </ScrollView>
+  );
 }
